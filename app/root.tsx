@@ -12,6 +12,7 @@ import primetheme from "primereact/resources/themes/lara-light-indigo/theme.css"
 import primecore from "primereact/resources/primereact.min.css"; //core css
 import primeicons from "primeicons/primeicons.css"; //icons
 import primeflex from "primeflex/primeflex.min.css"; //primeflex
+import mainStyles from "./styles/main.css";
 export function links() {
   return [
     {
@@ -30,6 +31,10 @@ export function links() {
       rel: "stylesheet",
       href: primeicons,
     },
+    {
+      rel: "stylesheet",
+      href: mainStyles,
+    },
   ];
 }
 
@@ -47,6 +52,9 @@ export default function App() {
         <Links />
         {/* <script src="https://api.cloudsponge.com/widget/localhost-only.js"></script> */}
         {/* <script type="text/javascript">cloudsponge.init();</script> */}
+        {/* <script type="text/javascript">cloudsponge.init({ 
+        rootNodeSelector: '#cloudsponge-widget-container' 
+        });</script> */}
         {/* <script type="text/javascript">cloudsponge.init({ 
         rootNodeSelector: '#cloudsponge-widget-container' 
         });</script> */}

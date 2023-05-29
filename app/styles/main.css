@@ -1,0 +1,25 @@
+.landing-header {
+  font-size: 24px;
+}
+
+.picker-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.done-btn {
+  height: 25px;
+}
+
+.logos {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.provider-logo {
+  background: transparent;
+  height: 50px;
+  width: 50px;
+}
