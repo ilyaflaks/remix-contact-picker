@@ -6,9 +6,8 @@ import yahoologo from "../../public/images/yahoo-logo.jpg";
 import office365logo from "../../public/images/office365-logo.png";
 
 export default function Index() {
-  const [count, setCount] = useState(0);
   const [visible, setVisible] = useState(false);
-  const [contactPicked, setContactPicked] = useState<string>("None so far");
+  const [contactPicked, setContactPicked] = useState<string | any[]>("");
 
   useEffect(() => {
     const head = document.querySelector("head");
@@ -22,6 +21,22 @@ export default function Index() {
       // after the script loads, cloudsponge should be defined and we can initialize our options now
       window.cloudsponge?.init({
         rootNodeSelector: "#cloudsponge-widget-container",
+        // beforeDisplayContacts: (c) => {
+        //   console.log("beforeSubmitContacts");
+        //   console.log(c);
+        // },
+        afterSubmitContacts: (contacts) => {
+          const formattedContacts = contacts.map(
+            (contact) => `${contact.fullName()} <${contact.selectedEmail()}>`
+          );
+          console.log("formattedContacts: ", formattedContacts);
+          //   setContactPicked(formattedContacts.join(", "));
+          setContactPicked((prev) => [
+            ...prev,
+            ...formattedContacts.join(", "),
+          ]);
+          setVisible(false);
+        },
       });
     };
     head?.appendChild(script);
@@ -31,23 +46,48 @@ export default function Index() {
     };
   }, []);
 
+  interface ContactType {
+    first_name: string;
+    last_name: string;
+    phone: Array<string>;
+    address: Array<string>;
+  }
+
+  const obj = {
+    first_name: "Ayush",
+    last_name: "Singhal",
+    phone: [],
+    email: [
+      {
+        address: "ayush@curajoy.com",
+        type: null,
+        primary: true,
+        selected: true,
+      },
+    ],
+    address: [],
+    groups: [],
+    companies: [],
+    job_title: "",
+    photos: [],
+    locations: [],
+    __selectedMail__: "ayush@curajoy.com",
+    __selectedPhone__: "",
+    __selectedAddress__: "",
+    __letter__: "s",
+  };
+
   // Call cloudsponge.launch, passing in the data-cloudsponge-source attribute if present
   const launchCloudsponge = ({ target }) => {
     window.cloudsponge?.launch(target.dataset.cloudspongeSource);
   };
 
-  const inputValue = useRef();
+  //   const inputValue = useRef();
 
   return (
     <div className="text-center">
-      {/* <Button
-        label="Click"
-        icon="pi pi-plus"
-        onClick={(e) => setCount(count + 1)}
-      ></Button>
-      <div className="text-2xl text-900 mt-3">{count}</div> */}
       <Button
-        label="Show Dialog"
+        label="Show Contact Picker"
         icon="pi pi-external-link"
         onClick={() => setVisible(true)}
       />
@@ -59,10 +99,10 @@ export default function Index() {
       >
         <div>
           <div className="picker-top">
-            <a href="#" onClick={launchCloudsponge}>
+            {/* <a href="#" onClick={launchCloudsponge}>
               Pick Contacts:
-            </a>
-            <input
+            </a> */}
+            {/* <input
               type="textarea"
               className="cloudsponge-contacts"
               ref={inputValue}
@@ -75,7 +115,7 @@ export default function Index() {
                 setContactPicked(inputValue.current.value);
                 setVisible(false);
               }}
-            />
+            /> */}
           </div>
           {
             // We use the launchCloudsponge onClick handler here because these links are only visible after
@@ -108,7 +148,7 @@ export default function Index() {
         <h1 className="landing-header">
           Click the button above to open the contact picker
         </h1>
-        <h1>Contact picked:</h1>
+        <h1>Contact(s) picked:</h1>
         <h1>{contactPicked}</h1>
       </div>
     </div>
