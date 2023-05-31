@@ -22,7 +22,7 @@ export default function Index() {
       window.cloudsponge?.init({
         rootNodeSelector: "#cloudsponge-widget-container",
         // beforeDisplayContacts: (c) => {
-        //   console.log("beforeSubmitContacts");
+        //   console.log("beforeDisplayContacts");
         //   console.log(c);
         // },
         afterSubmitContacts: (contacts) => {
@@ -52,30 +52,6 @@ export default function Index() {
     phone: Array<string>;
     address: Array<string>;
   }
-
-  const obj = {
-    first_name: "Ayush",
-    last_name: "Singhal",
-    phone: [],
-    email: [
-      {
-        address: "ayush@curajoy.com",
-        type: null,
-        primary: true,
-        selected: true,
-      },
-    ],
-    address: [],
-    groups: [],
-    companies: [],
-    job_title: "",
-    photos: [],
-    locations: [],
-    __selectedMail__: "ayush@curajoy.com",
-    __selectedPhone__: "",
-    __selectedAddress__: "",
-    __letter__: "s",
-  };
 
   // Call cloudsponge.launch, passing in the data-cloudsponge-source attribute if present
   const launchCloudsponge = ({ target }) => {
