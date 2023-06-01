@@ -9,12 +9,7 @@ import office365logo from "../../../public/images/office365-logo.png";
 
 function MultiplePicker() {
   const [showMultiplePicker, setShowMultiplePicker] = useState<boolean>(false);
-  // const [userContacts, setUserContacts] = useState<string[]>([]);
-  // const [contactOptions, setContactOptions] = useState<string[]>([]);
   const [selectedContacts, setSelectedContacts] = useState<string[]>([]);
-  // const [contactSearchValue, setContactSearchValue] = useState<string>("");
-  // const [showAddressBook, setShowAddressBook] = useState<boolean>(false);
-  // const [renderContacts, setRenderContacts] = useState<boolean>(false);
 
   useEffect(() => {
     const head = document.querySelector("head");
