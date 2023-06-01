@@ -23,3 +23,12 @@
   height: 50px;
   width: 50px;
 }
+
+.single-picker {
+  width: 700px;
+  margin: auto;
+  margin-bottom: 20px;
+  background-color: #ebebeb;
+  border: 1px solid #333333;
+  border-radius: 8px;
+}
