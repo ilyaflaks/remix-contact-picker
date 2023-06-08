@@ -5,52 +5,46 @@ import { Dialog } from "primereact/dialog";
 import googlelogo from "../../../public/images/google-logo.jpeg";
 import yahoologo from "../../../public/images/yahoo-logo.jpg";
 import office365logo from "../../../public/images/office365-logo.png";
+import { useCloudSponge } from "../../context/CloudSpongeContext";
 
 function SinglePicker() {
   const [showContactPicker, setShowContactPicker] = useState<boolean>(false);
   const [selectedContact, setSelectedContact] = useState<string>("Nobody");
+  const cloudsponge = useCloudSponge();
 
   useEffect(() => {
-    const head = document.querySelector("head");
-    const script = document.createElement("script");
+    // add the desired afterSubmit behaviour and specify a filter to this callback isn't run on any other scenarios
+    cloudsponge.on(
+      "afterSubmitContacts",
+      (contacts, source, owner, ctx) => {
+        console.log(
+          "%%%%%%%%%  afterSubmitContacts in contact SinglePicker %%%%%%%%%%"
+        );
 
-    script.setAttribute(
-      "src",
-      "https://api.cloudsponge.com/widget/localhost-only.js"
+        const selectedName = contacts[0].fullName()
+          ? `${contacts[0].fullName()}`
+          : `${contacts[0]
+              .selectedEmail()
+              .substring(0, contacts[0].selectedEmail().lastIndexOf("@"))}`;
+        console.log("selectedName: ", selectedName);
+        setSelectedContact(selectedName);
+        setShowContactPicker(false);
+      },
+      'SinglePicker'
     );
-    script.onload = () => {
-      window.cloudsponge?.init({
-        rootNodeSelector: "#cloudsponge-widget-container",
-        beforeDisplayContacts: (c) => {
-          console.log("beforeDisplayContacts in contact picker");
-        },
-
-        afterSubmitContacts: (contact) => {
-          console.log(
-            "%%%%%%%%%  afterSubmitContacts in contact SinglePicker %%%%%%%%%%"
-          );
-
-          const selectedName = contact[0].fullName()
-            ? `${contact[0].fullName()}`
-            : `${contact[0]
-                .selectedEmail()
-                .substring(0, contact[0].selectedEmail().lastIndexOf("@"))}`;
-          console.log("selectedName: ", selectedName);
-          setSelectedContact(selectedName);
-          setShowContactPicker(false);
-        },
-      });
-    };
-
-    head?.appendChild(script);
-
-    return () => {
-      head?.removeChild(script);
-    };
+    cloudsponge.on(
+      "beforeDisplayContacts",
+      (contacts, source, owner, ctx) => {
+        console.log("beforeDisplayContacts in contact picker");
+      },
+      'SinglePicker'
+    );
   }, []);
 
   const launchCloudsponge = ({ target }) => {
-    window.cloudsponge?.launch(target.dataset.cloudspongeSource);
+    // add the desired callbacks as we launch from this component:
+    // when launching, optionally pass in the filter parameter to exclude callbacks that don't match
+    cloudsponge.launch(target.dataset.cloudspongeSource, 'SinglePicker');
   };
 
   return (
