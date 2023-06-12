@@ -7,50 +7,38 @@ import googlelogo from "../../../public/images/google-logo.jpeg";
 import yahoologo from "../../../public/images/yahoo-logo.jpg";
 import office365logo from "../../../public/images/office365-logo.png";
 
+import { useCloudSponge } from "../../context/CloudSpongeContext";
+
 function MultiplePicker() {
   const [showMultiplePicker, setShowMultiplePicker] = useState<boolean>(false);
   const [selectedContacts, setSelectedContacts] = useState<string[]>([]);
 
+  const cloudsponge = useCloudSponge();
   useEffect(() => {
-    const head = document.querySelector("head");
-    const script = document.createElement("script");
+    const afterSubmit = (contacts, source, owner, ctx) => {
+      console.log(
+        "%%%%%%%%%  afterSubmitContacts in Multiple Picker %%%%%%%%%%"
+      );
 
-    script.setAttribute(
-      "src",
-      "https://api.cloudsponge.com/widget/localhost-only.js"
-    );
-    script.onload = () => {
-      window.cloudsponge?.init({
-        rootNodeSelector: "#cloudsponge-widget-container",
-        afterSubmitContacts: (contacts) => {
-          console.log(
-            "%%%%%%%%%  afterSubmitContacts in Multiple Picker %%%%%%%%%%"
-          );
-
-          const nameArray = contacts.map((c) =>
-            //if the contact does not have the name property populated, return email before '@'
-            c.fullName()
-              ? `${c.fullName()}`
-              : `${c
-                  .selectedEmail()
-                  .substring(0, c.selectedEmail().lastIndexOf("@"))}`
-          );
-          setSelectedContacts((prev) => [...prev, ...nameArray]);
-          console.log("selectedContacts: ", selectedContacts);
-          setShowMultiplePicker(false);
-        },
-      });
+      const nameArray = contacts.map((c) =>
+        //if the contact does not have the name property populated, return email before '@'
+        c.fullName()
+          ? `${c.fullName()}`
+          : `${c
+              .selectedEmail()
+              .substring(0, c.selectedEmail().lastIndexOf("@"))}`
+      );
+      setSelectedContacts((prev) => [...prev, ...nameArray]);
+      console.log("selectedContacts: ", selectedContacts);
+      setShowMultiplePicker(false);
     };
-
-    head?.appendChild(script);
-
-    return () => {
-      head?.removeChild(script);
-    };
+    // add the desired afterSubmit behaviour and specify a filter to this callback isn't run on any other scenarios
+    cloudsponge.on("afterSubmitContacts", afterSubmit, "MultiplePicker");
   }, []);
 
   const launchCloudsponge = ({ target }) => {
-    window.cloudsponge?.launch(target.dataset.cloudspongeSource);
+    // when launching, optionally pass in the filter parameter to exclude callbacks that don't match
+    cloudsponge.launch(target.dataset.cloudspongeSource, "MultiplePicker");
   };
 
   return (
