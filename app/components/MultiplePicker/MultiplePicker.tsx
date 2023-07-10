@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 
 import { Button } from "primereact/button";
-import { InputText } from "primereact/inputtext";
 import { Dialog } from "primereact/dialog";
 import googlelogo from "../../../public/images/google-logo.jpeg";
 import yahoologo from "../../../public/images/yahoo-logo.jpg";
@@ -14,6 +13,8 @@ function MultiplePicker() {
   const [selectedContacts, setSelectedContacts] = useState<string[]>([]);
 
   const cloudsponge = useCloudSponge();
+
+  //run this useEffect on first render
   useEffect(() => {
     const afterSubmit = (contacts, source, owner, ctx) => {
       console.log(
@@ -73,6 +74,7 @@ function MultiplePicker() {
           <h1 className="addressbook-header">Address Book</h1>
           <div className="logos">
             <img
+              alt="Google logo"
               src={googlelogo}
               className="provider-logo"
               onClick={launchCloudsponge}
@@ -80,6 +82,7 @@ function MultiplePicker() {
             ></img>
 
             <img
+              alt="Yahoo logo"
               src={yahoologo}
               className="provider-logo"
               onClick={launchCloudsponge}
@@ -87,6 +90,7 @@ function MultiplePicker() {
             ></img>
 
             <img
+              alt="Office 365 logo"
               src={office365logo}
               className="provider-logo"
               onClick={launchCloudsponge}

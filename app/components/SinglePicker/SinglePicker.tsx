@@ -14,11 +14,21 @@ function SinglePicker() {
 
   useEffect(() => {
     // add the desired afterSubmit behaviour and specify a filter to this callback isn't run on any other scenarios
+
+    //on is a method that accepts an event, a callback and a string to filter by
+    //in this case, afterSubmitContacts, func to update state with selected contact and "SinglePicker"
     cloudsponge.on(
       "afterSubmitContacts",
       (contacts, source, owner, ctx) => {
         console.log(
-          "%%%%%%%%%  afterSubmitContacts in contact SinglePicker %%%%%%%%%%"
+          "anon func of afterSubmitContacts in contact SinglePicker. contacts: ",
+          contacts,
+          ", source: ",
+          source,
+          ", owner: ",
+          owner,
+          ", ctx: ",
+          ctx
         );
 
         const selectedName = contacts[0].fullName()
@@ -30,21 +40,21 @@ function SinglePicker() {
         setSelectedContact(selectedName);
         setShowContactPicker(false);
       },
-      'SinglePicker'
-    );
-    cloudsponge.on(
-      "beforeDisplayContacts",
-      (contacts, source, owner, ctx) => {
-        console.log("beforeDisplayContacts in contact picker");
-      },
-      'SinglePicker'
+      "SinglePicker"
     );
   }, []);
 
   const launchCloudsponge = ({ target }) => {
     // add the desired callbacks as we launch from this component:
     // when launching, optionally pass in the filter parameter to exclude callbacks that don't match
-    cloudsponge.launch(target.dataset.cloudspongeSource, 'SinglePicker');
+    cloudsponge.launch(target.dataset.cloudspongeSource, "SinglePicker");
+    //launch is defined towards the end of context, accepts "source" and "filter" as args
+    //this func replaces this code:
+    //
+    // // const launchCloudsponge = ({ target }) => {
+    // //   window.cloudsponge?.launch(target.dataset.cloudspongeSource);
+    // // };
+    //
   };
 
   return (
@@ -71,6 +81,7 @@ function SinglePicker() {
           <h1 className="addressbook-header">Address Book</h1>
           <div className="logos">
             <img
+              alt="Google logo"
               src={googlelogo}
               className="provider-logo"
               onClick={launchCloudsponge}
@@ -78,6 +89,7 @@ function SinglePicker() {
             ></img>
 
             <img
+              alt="Yahoo logo"
               src={yahoologo}
               className="provider-logo"
               onClick={launchCloudsponge}
@@ -85,6 +97,7 @@ function SinglePicker() {
             ></img>
 
             <img
+              alt="Office365 logo"
               src={office365logo}
               className="provider-logo"
               onClick={launchCloudsponge}
